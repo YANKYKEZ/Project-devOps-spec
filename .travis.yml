@@ -1,0 +1,43 @@
+sudo: required
+services:
+  - docker
+language: generic
+
+before_install:
+  - docker build -t $DOCKER_USER/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run $DOCKER_USER/react-test npm test  --coverage
+
+after_success:
+  - docker build -t $DOCKER_USER/frontend ./client
+  - docker build -t $DOCKER_USER/server ./nginx
+  - docker build -t $DOCKER_USER/backend ./backend
+  # Login to the docker CLI
+  - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  # Docker tag version
+  - docker tag front $DOCKER_USER/frontend:$TRAVIS_BUILD_NUMBER
+  - docker tag front $DOCKER_USER/server:$TRAVIS_BUILD_NUMBER
+  - docker tag front $DOCKER_USER/backend:$TRAVIS_BUILD_NUMBER
+  # Take those images and push them to docker hub
+  - docker push $DOCKER_USER/frontend:$TRAVIS_BUILD_NUMBER
+  - docker push DOCKER_USER/server:$TRAVIS_BUILD_NUMBER
+  - docker push DOCKER_USER/backend:$TRAVIS_BUILD_NUMBER
+  # latest version
+  - docker tag front $DOCKER_USER/frontend:latest
+  - docker tag front $DOCKER_USER/server:latest
+  - docker tag front $DOCKER_USER/backend:latest
+  - docker push $DOCKER_USER/frontend:latest
+  - docker push DOCKER_USER/server:latest
+  - docker push DOCKER_USER/backend:latest
+
+deploy:
+  provider: elasticbeanstalk
+  region: us-east-2
+  app: multi-docker
+  env: MultiDocker-env
+  bucket_name: elasticbeanstalk-us-east-2-057368215425
+  bucket_path: docker-multi
+  on:
+    branch: master
+  
