@@ -6,8 +6,6 @@ language: generic
 before_install:
   - docker build -t $DOCKER_USER/react-test -f ./client/Dockerfile.dev ./client
 
-script:
-  - docker run $DOCKER_USER/react-test yarn test  
 
 after_success:
   - docker build -t $DOCKER_USER/frontend ./client
