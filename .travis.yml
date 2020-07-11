@@ -4,7 +4,7 @@ services:
 language: generic
 
 before_install:
-  - docker build -t $DOCKER_USER/react-test -f ./client/Dockerfile.dev .
+  - docker build -t $DOCKER_USER/react-test -f ./client/Dockerfile.dev ./client
 
 before_script:
   - docker run $DOCKER_USER/react-test yarn run test  --coverage
