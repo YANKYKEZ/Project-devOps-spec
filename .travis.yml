@@ -6,7 +6,9 @@ language: generic
 before_install:
   - docker build -t $DOCKER_USER/react-test -f ./client/Dockerfile.dev ./client
 
-
+before_script:
+  - npm install
+  
 after_success:
   - docker build -t $DOCKER_USER/frontend ./client
   - docker build -t $DOCKER_USER/server ./nginx
