@@ -10,9 +10,9 @@ before_script:
   - docker run $DOCKER_USER/react-test yarn test  --coverage
 
 after_success:
-  - docker build -t $DOCKER_USER/client ./client
-  - docker build -t $DOCKER_USER/server ./nginx
-  - docker build -t $DOCKER_USER/backend ./backend
+  - docker build -t $DOCKER_USER/client .
+  - docker build -t $DOCKER_USER/server .
+  - docker build -t $DOCKER_USER/backend .
   # Login to the docker CLI
   - docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
   # Docker tag version
