@@ -7,10 +7,10 @@ services:
   api:
     build:
       dockerfile: Dockerfile.dev
-      context: ./backend
+      context: ./server
     volumes:
       - /app/node_modules
-      - //f/docker/projects/complex/backend:/app
+      - //f/docker/projects/complex/server:/app
     environment:
       - REDIS_HOST=redis
       - REDIS_PORT=6379
@@ -27,6 +27,16 @@ services:
     volumes:
       - /app/node_modules
       - //f/docker/projects/complex/client:/app
+  worker:
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./worker
+    volumes:
+      - /app/node_modules
+      - //f/docker/projects/complex/worker:/app
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
   nginx:
     restart: always
     build:
