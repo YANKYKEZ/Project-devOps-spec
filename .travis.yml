@@ -7,7 +7,7 @@ before_install:
   - docker build -t $DOCKER_USER/react-test -f ./client/Dockerfile.dev ./client
 
 before_script:
-  - docker run shitanshu/react-test yarn test -- --coverage
+  - docker run DOCKER_USER/react-test yarn test -- --coverage
 
 after_success:
   - docker build -t $DOCKER_USER/client ./client
